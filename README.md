@@ -127,7 +127,7 @@ Happy hacking!
 
 Follow the last two commands to change into the newly create directory and start the development server on port 3000. A new browser window with the **Welcome to React** page will open up.
 
-TODO: image
+![Basic React.js App](https://tbleicher.github.io/sketchup-react-demo/images/basic_react_app.png)
 
 It may not look like much but this page has all elements of a working React *Single Page App*. Our goal is to bundle up this page into a portable format that we can copy into a Ruby extension and load into a new UI::HtmlDialog window.
 
