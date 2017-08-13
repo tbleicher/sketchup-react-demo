@@ -24,6 +24,12 @@ module SketchupReactDemo
     
     # create and show the UI::HtmlDialog instance
     dlg = UI::HtmlDialog.new(options);
+ 
+    # define 'su_action' callback to be used from JavaScript
+    dlg.add_action_callback("su_action") { |action_context, param1, param2|
+      puts "JavaScript triggered 'su_action' with parameters #{param1} and #{param2}"
+    }
+
     dlg.set_html html
     dlg.show
   end
