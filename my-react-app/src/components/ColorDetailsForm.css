@@ -1,0 +1,39 @@
+input {
+  margin: 5px;
+  display: block;
+}
+
+input[type=text] {
+  font-size: 14px;
+  padding: 5px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+}
+
+input[type=text]:focus {
+  border-color: #ccc;
+}
+
+input[type=submit] {
+  font-size: 80%;
+  font-weight: bold;
+  padding: 5px 15px;
+  background: rgb(70, 173, 246);
+  border: 0 none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 15px;
+  float: right;
+}
+
+input[type=submit]:disabled {
+  background: #ccc;
+}
+
+form span {
+  white-space: nowrap;
+}
+
+label {
+  margin-left: 10px;
+}
