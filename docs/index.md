@@ -1,4 +1,8 @@
-SketchUp 2017 has introduced the new class *UI::HtmlDialog* to display HTML content from a Ruby script. Unlike its predecessor - UI::WebDialog - the new class is based on *Chromium* which allows the use of modern HTML5 and Javascript on Windows and Mac OS.  
+SketchUp 2017 has introduced the new class *UI::HtmlDialog* to display HTML content from a Ruby script. Unlike its predecessor - UI::WebDialog - the new class is based on *Chromium* which supports modern HTML5 and Javascript on Windows and Mac OS.
+
+### Motivation
+
+TODO
 
 ### Content
 

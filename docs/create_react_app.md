@@ -129,6 +129,6 @@ Now we can start SketchUp 2017 and open the HtmlDialog from the new menu entry i
 
 ## Next steps
 
-We have a working setup with React running inside the HtmlDialog window. React doesn't do much yet and we have not set up any form of interaction with SketchUp. It would also be nice to have a simple command that could deploy updated React files locally to the `Plugins` folder or create a new `*.rbz` extension bundle. 
+We have a working setup with React running inside the HtmlDialog window. React doesn't do much yet and we have not set up any form of interaction with SketchUp. It would also be nice to have a simple command that could deploy updated React files locally to the `Plugins` folder or even create a new `*.rbz` extension bundle. 
 
 We will address these in the next parts of this tutorial.
