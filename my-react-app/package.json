@@ -15,6 +15,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy:local": "yarn build && bash ./utils/deploy_osx.sh"
+    "deploy:local": "yarn build && node ./utils/deploy_local.js"
   }
 }
