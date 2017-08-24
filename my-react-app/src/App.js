@@ -9,6 +9,7 @@ import './App.css';
 //declare 'sketchup' object as global to stop ESLint errors
 /*global sketchup*/
 
+// eslint-disable-next-line
 function sketchupAction(evt, state) {
   evt.preventDefault();
   try {

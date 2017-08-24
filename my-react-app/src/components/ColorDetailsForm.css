@@ -1,9 +1,16 @@
+#color_details {
+  width: 200px;
+  float: left;
+  margin-left: 20px;
+}
+
 input {
   margin: 5px;
   display: block;
 }
 
 input[type=text] {
+  width: 176px;
   font-size: 14px;
   padding: 5px;
   border: 2px solid #ccc;

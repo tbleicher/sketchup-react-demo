@@ -10,5 +10,7 @@ TODO
 
 [Creating a basic *React.js* project](./create_react_app.md)
 
+[Connecting Ruby and JavaScript](./connect_ruby_with_js.md)
+
 
 

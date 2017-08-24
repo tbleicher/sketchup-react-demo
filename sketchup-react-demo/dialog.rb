@@ -5,7 +5,6 @@ module SketchupReactDemo
 
   def process_data(data, dialog)
     puts 'processing data ...'
-    puts data
     js_command = "set_data({colors: ['red', 'green', 'blue']})"
     dialog.execute_script(js_command)
   end
@@ -23,7 +22,7 @@ module SketchupReactDemo
       :dialog_title => "Sketchup React Demo",
       :scrollable => true,
       :resizable => true,
-      :width => 400,
+      :width => 480,
       :height => 400,
       :left => 100,
       :top => 100,
@@ -34,10 +33,11 @@ module SketchupReactDemo
     dlg = UI::HtmlDialog.new(options)
  
     # define 'su_action' callback to be used from JavaScript
-    dlg.add_action_callback("su_action") { |action_context, param1, param2|
-      puts "JavaScript triggered 'su_action' with parameters #{param1} and #{param2}"
-      data = JSON.parse(param1)
-      process_data(data)
+    dlg.add_action_callback("su_action") { |action_context, param|
+      puts "JavaScript triggered 'su_action' with parameter #{param}"
+      param.each do |key, value|
+        puts "#{key} : #{value}"
+      end 
     }
 
     dlg.set_html html

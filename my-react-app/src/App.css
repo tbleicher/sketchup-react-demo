@@ -9,11 +9,15 @@
 }
 
 .App-body {
-  display: grid;
-  margin: 0px 40px;
-  grid-template-columns: 1fr 2fr;
-  grid-gap: 20px;
+  /* outline: 1px solid red; */
+  margin: 0 auto;
   padding-bottom: 20px;
+  height: 320px;
+  width: 420px;
+}
+
+.App-body div {
+  /* outline: 1px solid red; */
 }
 
 .App-header {

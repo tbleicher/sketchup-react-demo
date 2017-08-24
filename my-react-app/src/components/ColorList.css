@@ -1,3 +1,9 @@
+#color_list {
+  width: 200px;
+  float: left;
+  height: 100%;
+}
+
 ul {
   list-style-type: none;
   padding: 0px 5px;
