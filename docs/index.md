@@ -12,5 +12,9 @@ TODO
 
 [Connecting Ruby and JavaScript](./connect_ruby_with_js.md)
 
+### The App
 
+TODO: App Description
+
+TODO: Github repo
 

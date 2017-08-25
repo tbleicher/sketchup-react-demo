@@ -127,8 +127,14 @@ To deploy our files we just need to copy the contents of the build folder into o
 
 Now we can start SketchUp 2017 and open the HtmlDialog from the new menu entry in `Extensions`. The dialog should look identical to page that we got earlier from the development server. 
 
+### Automatic Deployment
+
+If you use the Github repository to follow along with this tutorial you can use the `deploy_local.js` script in the `utils` folder to build and copy all the files of the extension into the plugins folder of your SketchUp 2017 installation. It is also set up as a npm script in the package.json file so you can run it with 
+
+```
+npm run deploy:local
+```
+
 ## Next steps
 
-We have a working setup with React running inside the HtmlDialog window. React doesn't do much yet and we have not set up any form of interaction with SketchUp. It would also be nice to have a simple command that could deploy updated React files locally to the `Plugins` folder or even create a new `*.rbz` extension bundle. 
-
-We will address these in the next parts of this tutorial.
+We have a working setup with React running inside the HtmlDialog window. React doesn't do much yet and we have not set up any form of interaction with SketchUp. We will address these in the next parts of this tutorial.

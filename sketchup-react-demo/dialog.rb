@@ -42,6 +42,9 @@ module SketchupReactDemo
 
     dlg.set_html html
     dlg.show
+
+    # return dlg instance for interaction at Ruby console
+    return dlg
   end
 
 end

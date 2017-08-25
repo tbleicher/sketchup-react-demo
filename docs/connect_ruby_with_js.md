@@ -46,5 +46,40 @@ With this function we call our `su_action` funciton with an object as argument. 
 
 ![Data received in the Ruby console.](https://tbleicher.github.io/sketchup-react-demo/images/ruby_console.png) 
 
+Note that we didn't need to encode the JavaScript object in any way. It was sent to Ruby and converted to a Ruby hash object.
+
+### Sending Data to JavaScript
+
+Like JS-to-Ruby we can test the Ruby-to-JS connection interactively from Ruby. Our `SketchupReactDemo::show_dialog` functions returns a reference to the new HtmlDialog instance. The instance has an `execute_script` method that will execute a JavaScript command that is passed as argument. Open the Ruby console window and type the following command to start the HtmlDialog window:
+
+```ruby
+> dlg = SketchupReactDemo::show_dialog 
+#<UI::HtmlDialog:0x00000000000000>
+```
+
+Open the web developer tools and monitor the console output. Then continue in the Ruby console with:
+
+```ruby
+> dlg.execute_script('console.log({a: 1})')
+```
+
+You will see the object logged in the console. You can see that we are using JSON notation to specify the argument for the `console.log` call. In this notation, a Ruby hash corresponds to a JavaScript object. The Ruby JSON standard library provides an easy way to translate a hash into a JSON object:
+
+```ruby
+> require 'JSON'
+true
+> h = { 'a' => 1, 's' => 'string', 'arr' => [1,2,3] }
+{"a"=>1, "s"=>"string", "arr"=>[1, 2, 3]}
+> dlg.execute_script('console.log(%s)' % h.to_json)
+```
+
+You can expand the object logged in the web console to see that all the keys in the hash have been translated according to their type.
+
+![Data sent as JSON object.](./images/js_console_with_objects.png) 
 
 
+### Summary
+
+We have established a way to send data from the HtmlDialog to Ruby via a callback and use the `execute_script` function to invoke a JavaScript function with arguments. We used a JavaScript object and Ruby hash to hold the data we want to transfer and used JSON to convert the Ruby hash object.
+
+We will use these techniques in our app. A single object to hold the data works very well with the data model typically used with React. 

@@ -76,6 +76,11 @@ module SketchupReactDemo
     dlg = UI::HtmlDialog.new(options);
     dlg.set_html html
     dlg.show
+
+    # return dlg instance for interaction at Ruby console
+    return dlg
   end
 end
 ```
+
+The last return statement returns the dialog. We can use this to invoke the  `show_dialog` function from the Ruby console and interact with the returned dialog instance.
