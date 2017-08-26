@@ -10,15 +10,22 @@ import './App.css';
 /*global sketchup*/
 
 // eslint-disable-next-line
-function sketchupAction(evt, state) {
-  evt.preventDefault();
+function sketchupAction(state) {
+  // evt.preventDefault();
+  console.log('state:', JSON.stringify(state, null, 2));
   try {
-    sketchup.su_action('Hello World', 42);
+    sketchup.su_action(state);
   } catch (e) {
-    console.log(`Error: ${e.message}`);
-    console.log('state:', JSON.stringify(state, null, 2));
+    if (e.message !== 'sketchup is not defined') {
+      console.error(e);
+    }
   }
 }
+
+function mergeProps(state, newState) {
+  return Object.assign({}, state, newState);
+}
+
 
 const emptyMaterial = {
   name: '',
@@ -27,17 +34,18 @@ const emptyMaterial = {
   transparency: ''
 };
 
-const testMaterials = {
-  'Material1': {
-    name: 'Material1',
-    color: '#ffffff',
-    texture: '',
-    transparency: 1.0
-  },
-  'some name': Object.assign({}, emptyMaterial, { name: 'some name' }),
-  'one': Object.assign({}, emptyMaterial, { name: 'one' }),
-  'two': Object.assign({}, emptyMaterial, { name: 'two' }),
-  'three': Object.assign({}, emptyMaterial, { name: 'three' })
+const testMaterials = {} 
+'one two three four five six seven eight nine ten a11 b12 c13 d14 e15 f16 g17'
+.split(' ')
+.forEach(s => {
+  testMaterials[s] = Object.assign({}, emptyMaterial, { name: s });
+});
+
+testMaterials['Material1'] = {
+  name: 'Material1',
+  color: '#ffffff',
+  texture: '',
+  transparency: 1.0
 };
 
 class App extends Component {
@@ -52,10 +60,23 @@ class App extends Component {
     this.selectMaterial = this.selectMaterial.bind(this);
     this.updateMaterial = this.updateMaterial.bind(this);
     this.updateState = this.updateState.bind(this);
+    //this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this);
+  }
+  
+  componentDidMount() {
+    console.log('componentDidMount');
+  }
+
+  componentWillReceiveProps(nextProps={}) {
+    console.log("App.willReceiveProps", nextProps.store);
+    this.setState(mergeProps(this.state, nextProps.store || {}));
+
   }
 
   selectMaterial(name) {
+    console.log(`selectMaterial(${name})`);
     this.setState({ selected: name });
+    sketchupAction({ selected: name });
   }
 
   updateMaterial(evt, mat) {
@@ -72,7 +93,7 @@ class App extends Component {
 
   render() {
     const currentMaterial = this.state.materials[this.state.selected] || {};
-    const materials = Object.keys(this.state.materials);
+    const materials = Object.keys(this.state.materials).sort();
 
     return (
       <div className="App">
@@ -91,6 +112,9 @@ class App extends Component {
             material={currentMaterial}
             onApply={this.updateState}
           />
+        </div>
+        <div className="App-footer">
+          {navigator.userAgent}
         </div>
       </div>
     );

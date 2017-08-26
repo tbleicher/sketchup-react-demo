@@ -1,6 +1,9 @@
+body {
+  background-color: #eee;
+}
+
 .App {
   /* text-align: center; */
-  background-color: #eee;
 }
 
 .App-logo {
@@ -12,17 +15,23 @@
   /* outline: 1px solid red; */
   margin: 0 auto;
   padding-bottom: 20px;
-  height: 320px;
-  width: 420px;
+  width: 460px;
 }
 
-.App-body div {
+div {
   /* outline: 1px solid red; */
 }
 
 .App-header {
   background-color: #222;
   color: white;
+}
+
+.App-footer {
+  background-color: #222;
+  color: white;
+  font-size: 12px;
+  padding: 2px;
 }
 
 @keyframes App-logo-spin {

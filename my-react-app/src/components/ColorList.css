@@ -1,20 +1,35 @@
 #color_list {
   width: 200px;
   float: left;
-  height: 100%;
+  display: inline-block;
+  background-color: #ddd;
+  padding: 10px;
+}
+
+#color_list div#wrapper {
+  height: 200px;
+  overflow: auto;
+}
+
+#color_list div#preview_source {
+  margin-top: 10px;
+  height: 132px;
+  background-color: white;
+  border: 2px solid #bbb;
 }
 
 ul {
   list-style-type: none;
-  padding: 0px 5px;
+  padding: 0px;
   margin: 0px;
 }
 
 li {
   margin: 2px;
+  margin-left: 0px;
   padding: 5px;
   background-color: #fff;
-  border: 2px solid #ccc;
+  border: 2px solid #bbb;
   border-radius: 5px;
   cursor: pointer;
 }

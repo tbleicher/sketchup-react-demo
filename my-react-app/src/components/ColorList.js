@@ -16,9 +16,14 @@ function ColorList({ materials = [], onSelect = () => {}, selected = '' }) {
   return (
     <div id="color_list">
       <h4>Color List</h4>
-      <ul>
-        {list}
-      </ul>
+      <div id="wrapper">
+        <ul>
+          {list}
+        </ul>
+      </div>
+      <div id="preview_source">
+        {navigator.userAgent}
+      </div>
     </div>
   );
 }

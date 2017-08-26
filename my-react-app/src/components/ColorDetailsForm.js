@@ -4,12 +4,13 @@ import SimpleInput from './SimpleInput';
 
 import './ColorDetailsForm.css';
 
-const attributes = ['name', 'color', 'texture', 'transparency'];
+const attributes = ['name', 'display_name', 'color', 'alpha', 'texture'];
 const emptyMaterial = {
   name: '',
+  display_name: '',
   color: '',
-  texture: '',
-  transparency: ''
+  alpha: '',
+  texture: ''
 };
 
 function hasChanges(props, state) {

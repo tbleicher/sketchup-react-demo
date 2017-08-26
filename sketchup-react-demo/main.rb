@@ -1,12 +1,19 @@
 # sketchup-react-demo/main.rb
 $:.push(File.dirname(__FILE__))
+require 'material.rb'
 require 'dialog.rb'
 
 module SketchupReactDemo
   module_function
+  def reload
+    load('material.rb')
+    load('dialog.rb')
+  end
+
   def addDemoMenu
     plugins = UI.menu("Extensions")
     plugins.add_item("HtmlDialog Demo") { SketchupReactDemo::show_dialog }
+    plugins.add_item("HtmlDialog reload") { self.reload }
   end
 end
 

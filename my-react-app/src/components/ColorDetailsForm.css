@@ -1,24 +1,27 @@
 #color_details {
   width: 200px;
-  float: left;
   margin-left: 20px;
+  height: 390px;
+  display: inline-block;
+  padding: 10px;
+  background-color: #ddd;
 }
 
 input {
-  margin: 5px;
+  /* margin: 5px; */
   display: block;
 }
 
 input[type=text] {
-  width: 176px;
+  width: 186px;
   font-size: 14px;
   padding: 5px;
-  border: 2px solid #ccc;
+  border: 2px solid #bbb;
   border-radius: 5px;
 }
 
 input[type=text]:focus {
-  border-color: #ccc;
+  border-color: #bbb;
 }
 
 input[type=submit] {

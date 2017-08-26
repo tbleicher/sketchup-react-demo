@@ -2,15 +2,17 @@
 require 'json'
 
 module SketchupReactDemo
-
+  module_function
+  
   def process_data(data, dialog)
     puts 'processing data ...'
-    js_command = "set_data({colors: ['red', 'green', 'blue']})"
+    data = { 
+      'materials' => self.get_material_hash
+    }
+    js_command = 'update_data(' + data.to_json + ')'
     dialog.execute_script(js_command)
   end
     
-  module_function
-
   def show_dialog
     
     # load html from index.html and replace BASEURL with the current directory
@@ -34,10 +36,11 @@ module SketchupReactDemo
  
     # define 'su_action' callback to be used from JavaScript
     dlg.add_action_callback("su_action") { |action_context, param|
-      puts "JavaScript triggered 'su_action' with parameter #{param}"
+      puts "\nJavaScript triggered 'su_action' with parameter #{param}"
       param.each do |key, value|
         puts "#{key} : #{value}"
       end 
+      SketchupReactDemo::process_data(param, dlg)
     }
 
     dlg.set_html html

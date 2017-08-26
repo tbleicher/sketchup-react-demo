@@ -7,8 +7,10 @@ import App from './App';
 var store = { colors: [], number: 42, string: 'Hello, World!' };
 
 // eslint-disable-next-line
-function set_data (data) {
-  store = Object.assign({}, store, data)
+global.update_data = function(data) {
+  console.log('=> update_data');
+  console.log(JSON.stringify(data, null, 2));
+  store = Object.assign({}, store, data);
   ReactDOM.render(<App store={store} />, document.getElementById('root'));
 }
 
