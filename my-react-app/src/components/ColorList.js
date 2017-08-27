@@ -2,7 +2,7 @@ import React from 'react';
 
 import './ColorList.css';
 
-function ColorList({ materials = [], onSelect = () => {}, selected = '' }) {
+function ColorList({ title='Materials', materials = [], onSelect = () => {}, selected = '' }) {
   const list = materials.map(name => {
     const clsName = (name === selected) ? 'selected' : '';
 
@@ -15,7 +15,7 @@ function ColorList({ materials = [], onSelect = () => {}, selected = '' }) {
 
   return (
     <div id="color_list">
-      <h4>Color List</h4>
+      <h4>{title}</h4>
       <div id="wrapper">
         <ul>
           {list}

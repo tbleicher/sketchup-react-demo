@@ -26,26 +26,27 @@ function mergeProps(state, newState) {
   return Object.assign({}, state, newState);
 }
 
-
 const emptyMaterial = {
   name: '',
-  color: '', 
-  texture: '', 
-  transparency: ''
+  displayName: '',
+  color: '',
+  texture: '',
+  alpha: ''
 };
 
-const testMaterials = {} 
+const testMaterials = {};
 'one two three four five six seven eight nine ten a11 b12 c13 d14 e15 f16 g17'
-.split(' ')
-.forEach(s => {
-  testMaterials[s] = Object.assign({}, emptyMaterial, { name: s });
-});
+  .split(' ')
+  .forEach(s => {
+    testMaterials[s] = Object.assign({}, emptyMaterial, { name: s });
+  });
 
 testMaterials['Material1'] = {
   name: 'Material1',
+  displayName: 'Material1',
   color: '#ffffff',
   texture: '',
-  transparency: 1.0
+  alpha: 1.0
 };
 
 class App extends Component {
@@ -60,17 +61,15 @@ class App extends Component {
     this.selectMaterial = this.selectMaterial.bind(this);
     this.updateMaterial = this.updateMaterial.bind(this);
     this.updateState = this.updateState.bind(this);
-    //this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this);
   }
-  
+
   componentDidMount() {
     console.log('componentDidMount');
   }
 
-  componentWillReceiveProps(nextProps={}) {
-    console.log("App.willReceiveProps", nextProps.store);
+  componentWillReceiveProps(nextProps = {}) {
+    console.log('App.willReceiveProps', nextProps.store);
     this.setState(mergeProps(this.state, nextProps.store || {}));
-
   }
 
   selectMaterial(name) {
@@ -104,9 +103,13 @@ class App extends Component {
 
         <div className="App-body">
           <ColorList
+            title={'Source List'}
             materials={materials}
             onSelect={this.selectMaterial}
             selected={this.state.selected}
+          />
+          <ColorList
+            title={'Targets'}
           />
           <ColorDetailsForm
             material={currentMaterial}

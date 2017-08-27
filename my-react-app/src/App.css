@@ -3,7 +3,9 @@ body {
 }
 
 .App {
-  /* text-align: center; */
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 .App-logo {
@@ -12,14 +14,17 @@ body {
 }
 
 .App-body {
-  /* outline: 1px solid red; */
-  margin: 0 auto;
-  padding-bottom: 20px;
-  width: 460px;
+  /* flex 1 will maximize body height (vertical) */
+  flex: 1;
+  /* display: flex; applies to teh content (horizontal) */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
-div {
+.App-body > div {
   /* outline: 1px solid red; */
+  margin: 0px 10px;
 }
 
 .App-header {
@@ -31,7 +36,7 @@ div {
   background-color: #222;
   color: white;
   font-size: 12px;
-  padding: 2px;
+  padding: 3px 5px;
 }
 
 @keyframes App-logo-spin {
@@ -47,7 +52,7 @@ div {
 }
 
 h4 {
-  margin: 15px 10px 10px 10px;
+  margin: 5px;
 }
 
 

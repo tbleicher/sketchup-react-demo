@@ -4,19 +4,17 @@ import SimpleInput from './SimpleInput';
 
 import './ColorDetailsForm.css';
 
-const attributes = ['name', 'display_name', 'color', 'alpha', 'texture'];
+const attributes = ['name', 'displayName', 'color', 'alpha', 'texture'];
 const emptyMaterial = {
   name: '',
-  display_name: '',
+  displayName: '',
   color: '',
   alpha: '',
   texture: ''
 };
 
 function hasChanges(props, state) {
-  const changed = attributes.map(a => props[a] !== state[a]).some(e => e);
-
-  return changed;
+  return attributes.map(a => props[a] !== state[a]).some(e => e);
 }
 
 class ColorDetailsForm extends Component {
@@ -42,7 +40,7 @@ class ColorDetailsForm extends Component {
   render() {
     const inputs = attributes.map(attr => {
       return (
-        <span key={attr}>
+        <div key={attr}>
           <label htmlFor={attr}>
             {attr}
           </label>
@@ -51,7 +49,7 @@ class ColorDetailsForm extends Component {
             value={this.state[attr]}
             onChange={() => this.updateState(attr)}
           />
-        </span>
+        </div>
       );
     });
 

@@ -24,8 +24,8 @@ module SketchupReactDemo
       :dialog_title => "Sketchup React Demo",
       :scrollable => true,
       :resizable => true,
-      :width => 480,
-      :height => 400,
+      :width => 750,
+      :height => 500,
       :left => 100,
       :top => 100,
       :style => UI::HtmlDialog::STYLE_DIALOG

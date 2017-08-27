@@ -1,7 +1,5 @@
 #color_details {
   width: 200px;
-  margin-left: 20px;
-  height: 390px;
   display: inline-block;
   padding: 10px;
   background-color: #ddd;
@@ -25,14 +23,14 @@ input[type=text]:focus {
 }
 
 input[type=submit] {
-  font-size: 80%;
+  font-size: 80%; 
   font-weight: bold;
   padding: 5px 15px;
+  margin-top: 10px;
   background: rgb(70, 173, 246);
   border: 0 none;
   cursor: pointer;
   border-radius: 5px;
-  margin-top: 15px;
   float: right;
 }
 
@@ -40,10 +38,12 @@ input[type=submit]:disabled {
   background: #ccc;
 }
 
-form span {
+form div {
   white-space: nowrap;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
 label {
-  margin-left: 10px;
+  margin-left: 5px;
 }
