@@ -25,6 +25,8 @@ body {
 .App-body > div {
   /* outline: 1px solid red; */
   margin: 0px 10px;
+  /* header: 44px, footer: 20px, padding 2*10px */
+  height: calc(100vh - 88px);
 }
 
 .App-header {
@@ -37,6 +39,7 @@ body {
   color: white;
   font-size: 12px;
   padding: 3px 5px;
+  height: 18px;
 }
 
 @keyframes App-logo-spin {
@@ -55,4 +58,7 @@ h4 {
   margin: 5px;
 }
 
+.error {
+  color: orange;
+}
 

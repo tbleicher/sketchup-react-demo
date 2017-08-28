@@ -6,10 +6,41 @@ module SketchupReactDemo
   
   def process_data(data, dialog)
     puts 'processing data ...'
-    data = { 
-      'materials' => self.get_material_hash
-    }
-    js_command = 'update_data(' + data.to_json + ')'
+    begin
+      response = {'error' => 'unknown action', 'status' => 'error'}
+
+      if data['action'] == 'LOAD_MATERIALS'
+        response = { 
+          'materials' => self.get_material_hash,
+          'status' => 'materials loaded'
+        }
+      end
+
+      if data['action'] == 'LOAD_THUMBNAIL' then
+        name = data['payload']
+        thumbnail = self.get_thumbnail_base64(name)
+        response = {
+          'thumbnails' => { name => thumbnail },
+          'status' => "thumbnail '#{name}' loaded"
+        }
+      end
+          
+      if data['action'] == 'REPLACE_MATERIAL'
+          replace = data['payload']['replace']
+          replace_with = data['payload']['replace_with']
+          self.replace_material(replace, replace_with)
+          response = {
+            'materials' => self.get_material_hash,
+            'status' => "replaced '#{replace}' with '#{replace_with}'"
+          }
+      end
+
+    rescue => e
+      puts e
+      response = {'error' => e, 'status' => 'error'}
+    end
+    
+    js_command = 'update_data(' + response.to_json + ')'
     dialog.execute_script(js_command)
   end
     

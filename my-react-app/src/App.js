@@ -9,26 +9,13 @@ import './App.css';
 //declare 'sketchup' object as global to stop ESLint errors
 /*global sketchup*/
 
-// eslint-disable-next-line
-function sketchupAction(state) {
-  // evt.preventDefault();
-  console.log('state:', JSON.stringify(state, null, 2));
-  try {
-    sketchup.su_action(state);
-  } catch (e) {
-    if (e.message !== 'sketchup is not defined') {
-      console.error(e);
-    }
-  }
-}
+function testMaterial(name) {
 
-function mergeProps(state, newState) {
-  return Object.assign({}, state, newState);
 }
 
 const emptyMaterial = {
   name: '',
-  displayName: '',
+  display_name: '',
   color: '',
   texture: '',
   alpha: ''
@@ -43,19 +30,77 @@ const testMaterials = {};
 
 testMaterials['Material1'] = {
   name: 'Material1',
-  displayName: 'Material1',
-  color: '#ffffff',
+  display_name: 'Material1',
+  color: 'Color (255, 255, 255, 255)',
   texture: '',
   alpha: 1.0
 };
+
+function browser_su_action(action) {
+  switch (action.action) {
+    case 'LOAD_MATERIALS':
+      return {
+        status: 'loaded materials list',
+        materials: testMaterials
+      };
+    case 'LOAD_THUMBNAIL':
+      return {
+        status: `loaded thumbnail for material '${action.payload}'`
+      };
+    case 'REPLACE_MATERIAL':
+      return {
+        status: `replaced material ${action.payload.replace} with ${action.payload.replace_with}`
+      };
+    default:
+      return {};
+  }
+}
+
+// eslint-disable-next-line
+function sketchupAction(action) {
+  // evt.preventDefault();
+  console.log('state:', JSON.stringify(action, null, 2));
+  try {
+    sketchup.su_action(action);
+  } catch (e) {
+    if (e.message !== 'sketchup is not defined') {
+      console.error(e);
+    } else {
+      const data = browser_su_action(action);
+      // eslint-disable-next-line
+      global.update_data({ ...data });
+    }
+  }
+}
+
+// replace error, materials and status but update thumbnails
+function mergeProps(state, newState = {}) {
+  return {
+    error: newState.error || state.error || '',
+    materials: newState.materials || state.materials || {},
+    status: newState.status || state.status || '',
+    thumbnails: Object.assign({}, state.thumbnails, newState.thumbnails)
+  };
+}
+
+function formatStatus(error = '', status = '') {
+  return error
+    ? <span className="error">
+        {error}
+      </span>
+    : status;
+}
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      materials: testMaterials,
-      selected: 'Material1'
+      error: '',
+      materials: {},
+      selected: 'Material1',
+      status: 'App.constructor()',
+      thumbnails: {}
     };
 
     this.selectMaterial = this.selectMaterial.bind(this);
@@ -65,17 +110,20 @@ class App extends Component {
 
   componentDidMount() {
     console.log('componentDidMount');
+    sketchupAction({ action: 'LOAD_MATERIALS' });
   }
 
   componentWillReceiveProps(nextProps = {}) {
-    console.log('App.willReceiveProps', nextProps.store);
-    this.setState(mergeProps(this.state, nextProps.store || {}));
+    const merged = mergeProps(this.state, nextProps.data);
+    this.setState(merged);
   }
 
   selectMaterial(name) {
     console.log(`selectMaterial(${name})`);
     this.setState({ selected: name });
-    sketchupAction({ selected: name });
+    if (!this.state.thumbnails[name]) {
+      sketchupAction({ action: 'LOAD_THUMBNAIL', payload: name });
+    }
   }
 
   updateMaterial(evt, mat) {
@@ -93,6 +141,17 @@ class App extends Component {
   render() {
     const currentMaterial = this.state.materials[this.state.selected] || {};
     const materials = Object.keys(this.state.materials).sort();
+    const statusmsg = formatStatus(this.state.error, this.state.status);
+
+    const list = materials.length
+      ? <ColorList
+          title={'Source List'}
+          materials={materials}
+          onSelect={this.selectMaterial}
+          selected={this.state.selected}
+          thumbnail={this.state.thumbnails[this.state.selected]}
+        /> 
+      : <span onClick={() => sketchupAction({ action: 'LOAD_MATERIALS' })}>load materials</span>
 
     return (
       <div className="App">
@@ -102,22 +161,15 @@ class App extends Component {
         </div>
 
         <div className="App-body">
-          <ColorList
-            title={'Source List'}
-            materials={materials}
-            onSelect={this.selectMaterial}
-            selected={this.state.selected}
-          />
-          <ColorList
-            title={'Targets'}
-          />
+          {list}
+          <ColorList title={'Targets'} />
           <ColorDetailsForm
             material={currentMaterial}
             onApply={this.updateState}
           />
         </div>
         <div className="App-footer">
-          {navigator.userAgent}
+          {statusmsg}
         </div>
       </div>
     );

@@ -4,10 +4,10 @@ import SimpleInput from './SimpleInput';
 
 import './ColorDetailsForm.css';
 
-const attributes = ['name', 'displayName', 'color', 'alpha', 'texture'];
+const attributes = ['name', 'display_name', 'color', 'alpha', 'texture'];
 const emptyMaterial = {
   name: '',
-  displayName: '',
+  display_name: '',
   color: '',
   alpha: '',
   texture: ''
