@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import ColorDetailsForm from './components/ColorDetailsForm';
 import ColorList from './components/ColorList';
+import ColorDiffList from './components/ColorDiffList';
 
 import logo from './logo.svg';
 import './App.css';
@@ -10,31 +11,27 @@ import './App.css';
 /*global sketchup*/
 
 function testMaterial(name) {
-
+  const r = parseInt(Math.random() * 256, 10);
+  const g = parseInt(Math.random() * 256, 10);
+  const b = parseInt(Math.random() * 256, 10);
+  return {
+    name,
+    display_name: name,
+    color: `Color(${r}, ${g}, ${b}, 255)`,
+    red: r,
+    green: g,
+    blue: b,
+    texture: '',
+    alpha: 1.0
+  };
 }
 
-const emptyMaterial = {
-  name: '',
-  display_name: '',
-  color: '',
-  texture: '',
-  alpha: ''
-};
-
 const testMaterials = {};
-'one two three four five six seven eight nine ten a11 b12 c13 d14 e15 f16 g17'
+'Material1 two M3 four five six seven eight nine ten a11 b12 c13 d14 e15 f16 g17'
   .split(' ')
   .forEach(s => {
-    testMaterials[s] = Object.assign({}, emptyMaterial, { name: s });
+    testMaterials[s] = testMaterial(s);
   });
-
-testMaterials['Material1'] = {
-  name: 'Material1',
-  display_name: 'Material1',
-  color: 'Color (255, 255, 255, 255)',
-  texture: '',
-  alpha: 1.0
-};
 
 function browser_su_action(action) {
   switch (action.action) {
@@ -49,7 +46,8 @@ function browser_su_action(action) {
       };
     case 'REPLACE_MATERIAL':
       return {
-        status: `replaced material ${action.payload.replace} with ${action.payload.replace_with}`
+        status: `replaced material ${action.payload.replace} with ${action
+          .payload.replace_with}`
       };
     default:
       return {};
@@ -140,18 +138,19 @@ class App extends Component {
 
   render() {
     const currentMaterial = this.state.materials[this.state.selected] || {};
-    const materials = Object.keys(this.state.materials).sort();
     const statusmsg = formatStatus(this.state.error, this.state.status);
 
-    const list = materials.length
+    const list = Object.keys(this.state.materials).length
       ? <ColorList
           title={'Source List'}
-          materials={materials}
+          materials={this.state.materials}
           onSelect={this.selectMaterial}
           selected={this.state.selected}
           thumbnail={this.state.thumbnails[this.state.selected]}
-        /> 
-      : <span onClick={() => sketchupAction({ action: 'LOAD_MATERIALS' })}>load materials</span>
+        />
+      : <span onClick={() => sketchupAction({ action: 'LOAD_MATERIALS' })}>
+          load materials
+        </span>;
 
     return (
       <div className="App">
@@ -162,7 +161,11 @@ class App extends Component {
 
         <div className="App-body">
           {list}
-          <ColorList title={'Targets'} />
+          <ColorDiffList
+            title={'Matching Colors'}
+            materials={this.state.materials}
+            selected={this.state.selected}
+          />
           <ColorDetailsForm
             material={currentMaterial}
             onApply={this.updateState}

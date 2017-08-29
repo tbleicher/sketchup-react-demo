@@ -19,8 +19,12 @@ module SketchupReactDemo
       material['name'] = m.name
       material['display_name'] = m.display_name
       
-      material['alpha'] = m.alpha
       material['color'] = m.color.to_s
+      material['red'] = m.color.red
+      material['green'] = m.color.green
+      material['blue'] = m.color.blue
+      material['alpha'] = m.alpha
+      
       material['colorize_type'] = m.colorize_type
       material['colorize_deltas'] = m.colorize_deltas
       material['materialType'] = m.materialType

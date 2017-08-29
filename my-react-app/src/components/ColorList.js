@@ -7,15 +7,18 @@ function imgSrcFromBase64(data) {
 }
 
 
-function ColorList({ title='Materials', materials = [], onSelect = () => {}, selected = '', thumbnail = ''}) {
-  const list = materials.map(name => {
-    const clsName = (name === selected) ? 'selected' : '';
-    return (
-      <li key={name} className={clsName} onClick={() => onSelect(name)}>
-        {name}
-      </li>
-    );
-  });
+function ColorList({ title='Materials', materials = {}, onSelect = () => {}, selected = '', thumbnail = ''}) {
+  const list = Object.keys(materials)
+    .map(name => materials[name])
+    .sort((a,b) => a.name.localeCompare(b.name))
+    .map(m => {
+      const clsName = (m.name === selected) ? 'selected' : '';
+      return (
+        <li key={m.name} className={clsName} onClick={() => onSelect(m.name)}>
+          {m.display_name || m.name}
+        </li>
+      );
+    });
   const tn = thumbnail ? imgSrcFromBase64(thumbnail) : 'todo: img';
   
   return (
