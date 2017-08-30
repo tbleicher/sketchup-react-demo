@@ -19,10 +19,6 @@ function color_diff(ref, m) {
   return diff(ref_lab, m_lab);
 }
 
-function replace_link(n, onReplace) {
-  return (n === 0) ? '' : <span onClick={() => onReplace()}>replace</span>;
-}
-
 function ColorDiffList({
   title = 'Matching Colors',
   materials = {},
@@ -43,9 +39,11 @@ function ColorDiffList({
     .map(m => {
       return (
         <li key={m.name}>
-          {m.thumbnail
-            ? imgSrcFromBase64(m.thumbnail)
-            : <img src={logo} width={64} height={64} alt="thumbnail" />}
+          {m.thumbnail ? (
+            imgSrcFromBase64(m.thumbnail)
+          ) : (
+            <img src={logo} width={64} height={64} alt="thumbnail" />
+          )}
           {m.display_name || m.name}
           <br />
           <span className="cdiff">
@@ -53,7 +51,11 @@ function ColorDiffList({
             <br />
             {m.texture}
             <br />
-            {replace_link(m.diff, ()=> onReplace(m.name) )}
+            {selected ? (
+              <span onClick={() => onReplace(m.name)}>replace</span>
+            ) : (
+              ''
+            )}
           </span>
         </li>
       );
@@ -61,13 +63,9 @@ function ColorDiffList({
 
   return (
     <div id="color_diff_list">
-      <h4>
-        {title}
-      </h4>
+      <h4>{title}</h4>
       <div className="wrapper">
-        <ul>
-          {list}
-        </ul>
+        <ul>{list}</ul>
       </div>
     </div>
   );
