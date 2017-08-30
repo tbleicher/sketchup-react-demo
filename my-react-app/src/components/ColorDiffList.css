@@ -34,6 +34,7 @@ ul {
 }
 
 #color_diff_list li {
+  font-weight: bold;
   margin: 2px;
   margin-left: 0px;
   padding: 5px;
@@ -52,6 +53,7 @@ li.selected {
 .cdiff {
   font-size: 12px;
   font-style: italic;
+  font-weight: normal;
 }
 
 #color_diff_list img {
