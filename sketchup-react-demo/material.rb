@@ -28,7 +28,7 @@ module SketchupReactDemo
       material['colorize_type'] = m.colorize_type
       material['colorize_deltas'] = m.colorize_deltas
       material['materialType'] = m.materialType
-      material['texture'] = m.texture ? self.get_texture_filename(m.texture) : 'none'
+      material['texture'] = m.texture ? self.get_texture_filename(m.texture) : ''
 
       material_hash[m.name] = material
     }
@@ -42,6 +42,12 @@ module SketchupReactDemo
     material.write_thumbnail(thumbnail_file, 128)
     content = File.binread(thumbnail_file)
     return Base64.encode64(content)
+  end
+
+  def get_thumbnails_hash
+    Sketchup.active_model.materials.map{ |m| 
+      [m.name, get_thumbnail_base64(m.name)] 
+    }.to_h
   end
 
   def replace_material(replace, replace_with)

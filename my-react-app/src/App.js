@@ -33,6 +33,14 @@ const testMaterials = {};
     testMaterials[s] = testMaterial(s);
   });
 
+function replace_action(payload) {
+  const replace = payload.replace;
+  const materials = Object.assign({}, payload.materials);
+  delete materials[replace];
+  const status = `replaced material ${payload.replace} with ${payload.replace_with}`;
+  return { status, materials };
+}
+
 function browser_su_action(action) {
   switch (action.action) {
     case 'LOAD_MATERIALS':
@@ -44,11 +52,12 @@ function browser_su_action(action) {
       return {
         status: `loaded thumbnail for material '${action.payload}'`
       };
-    case 'REPLACE_MATERIAL':
+    case 'LOAD_THUMBNAILS':
       return {
-        status: `replaced material ${action.payload.replace} with ${action
-          .payload.replace_with}`
+        error: 'loaded all thumbnails'
       };
+    case 'REPLACE_MATERIAL':
+      return replace_action(action.payload);
     default:
       return {};
   }
@@ -74,7 +83,7 @@ function sketchupAction(action) {
 // replace error, materials and status but update thumbnails
 function mergeProps(state, newState = {}) {
   return {
-    error: newState.error || state.error || '',
+    error: newState.error || '',
     materials: newState.materials || state.materials || {},
     status: newState.status || state.status || '',
     thumbnails: Object.assign({}, state.thumbnails, newState.thumbnails)
@@ -96,29 +105,49 @@ class App extends Component {
     this.state = {
       error: '',
       materials: {},
-      selected: 'Material1',
-      status: 'App.constructor()',
+      selected: '',
+      status: '',
       thumbnails: {}
     };
 
+    this.replaceMaterial = this.replaceMaterial.bind(this);
     this.selectMaterial = this.selectMaterial.bind(this);
     this.updateMaterial = this.updateMaterial.bind(this);
     this.updateState = this.updateState.bind(this);
   }
 
+  // load materials immediately after app component is created
   componentDidMount() {
     console.log('componentDidMount');
     sketchupAction({ action: 'LOAD_MATERIALS' });
+    setTimeout(() => sketchupAction({ action: 'LOAD_THUMBNAILS' }), 2000);
   }
 
+  // update state with new state received via nextProps
   componentWillReceiveProps(nextProps = {}) {
     const merged = mergeProps(this.state, nextProps.data);
     this.setState(merged);
   }
 
+  //
+  replaceMaterial(name) {
+    if (this.state.selected) {
+      console.log(`replaceMaterial(${name})`);
+      sketchupAction({
+        action: 'REPLACE_MATERIAL',
+        payload: {
+          replace: name,
+          replace_with: this.state.selected,
+          // adding materials to simulate update via browser_su_action
+          materials: this.state.materials
+        }
+      });
+    }
+  }
+
   selectMaterial(name) {
     console.log(`selectMaterial(${name})`);
-    this.setState({ selected: name });
+    this.setState({ selected: name, status: `selected material ${name}` });
     if (!this.state.thumbnails[name]) {
       sketchupAction({ action: 'LOAD_THUMBNAIL', payload: name });
     }
@@ -164,7 +193,9 @@ class App extends Component {
           <ColorDiffList
             title={'Matching Colors'}
             materials={this.state.materials}
+            onReplace={this.replaceMaterial}
             selected={this.state.selected}
+            thumbnails={this.state.thumbnails}
           />
           <ColorDetailsForm
             material={currentMaterial}

@@ -41,7 +41,7 @@ ul {
   border: 2px solid #bbb;
   border-radius: 5px;
   cursor: pointer;
-  height: 64px;
+  height: 66px;
 }
 
 li.selected {
@@ -57,4 +57,6 @@ li.selected {
 #color_diff_list img {
   border: 1px solid #bbb;
   float: right;
+  width: 64px;
+  height: 64px;
 }

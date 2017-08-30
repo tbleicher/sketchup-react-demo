@@ -1,29 +1,41 @@
 import React from 'react';
 
 import './ColorList.css';
+import logo from '../logo.svg';
 
 function imgSrcFromBase64(data) {
-  return (<img src={`data:image/png;base64, ${data}`} alt="material thumbnail" />)
+  return (
+    <img src={`data:image/png;base64, ${data}`} alt="material thumbnail" />
+  );
 }
 
-
-function ColorList({ title='Materials', materials = {}, onSelect = () => {}, selected = '', thumbnail = ''}) {
+function ColorList({
+  title = 'Materials',
+  materials = {},
+  onSelect = () => {},
+  selected = '',
+  thumbnail = ''
+}) {
   const list = Object.keys(materials)
     .map(name => materials[name])
-    .sort((a,b) => a.name.localeCompare(b.name))
+    .sort((a, b) => a.name.localeCompare(b.name))
     .map(m => {
-      const clsName = (m.name === selected) ? 'selected' : '';
+      const clsName = m.name === selected ? 'selected' : '';
       return (
         <li key={m.name} className={clsName} onClick={() => onSelect(m.name)}>
           {m.display_name || m.name}
         </li>
       );
     });
-  const tn = thumbnail ? imgSrcFromBase64(thumbnail) : 'todo: img';
-  
+  const tn = thumbnail
+    ? imgSrcFromBase64(thumbnail)
+    : <img src={logo} width={128} height={128} alt="thumbnail" />;
+
   return (
     <div id="color_list">
-      <h4>{title}</h4>
+      <h4>
+        {title}
+      </h4>
       <div id="wrapper">
         <ul>
           {list}
