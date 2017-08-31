@@ -25,9 +25,9 @@ module SketchupReactDemo
       material['blue'] = m.color.blue
       material['alpha'] = m.alpha
       
-      material['colorize_type'] = m.colorize_type
-      material['colorize_deltas'] = m.colorize_deltas
-      material['materialType'] = m.materialType
+      material['colorize_type'] = ['shift', 'tint'][m.colorize_type]
+      material['colorize_deltas'] = "%.3f - %.3f - %.3f" % m.colorize_deltas
+      material['materialType'] = ['solid', 'textured', 'colorized textured'][m.materialType]
       material['texture'] = m.texture ? self.get_texture_filename(m.texture) : ''
 
       material_hash[m.name] = material

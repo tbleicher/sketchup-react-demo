@@ -18,7 +18,7 @@
   margin-bottom: 5px;
 }
 
-.detail .selected, .detail .current {
+.detail .source, .detail .current {
   padding: 2px;
   background-color: white;
   font-size: 14px;

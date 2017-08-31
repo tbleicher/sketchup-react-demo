@@ -25,15 +25,15 @@ function ColorDiffList({
   materials = {},
   onReplace = () => {},
   onCurrent = () => {},
-  selected = '',
+  source = '',
   thumbnails = {}
 }) {
   const list = Object.keys(materials)
     .map(name => materials[name])
-    .filter(m => m.name !== selected)
+    .filter(m => m.name !== source)
     .map(m =>
       Object.assign({}, m, {
-        diff: color_diff(materials[selected], m),
+        diff: color_diff(materials[source], m),
         thumbnail: thumbnails[m.name]
       })
     )
@@ -54,7 +54,7 @@ function ColorDiffList({
             <br />
             {m.texture}
             <br />
-            {(selected && cls) ? (
+            {(source && cls) ? (
               <span onClick={() => onReplace(m.name)}>replace</span>
             ) : (
               ''

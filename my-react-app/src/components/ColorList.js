@@ -13,14 +13,14 @@ function ColorList({
   title = 'Materials',
   materials = {},
   onSelect = () => {},
-  selected = '',
+  source = '',
   thumbnail = ''
 }) {
   const list = Object.keys(materials)
     .map(name => materials[name])
     .sort((a, b) => a.name.localeCompare(b.name))
     .map(m => {
-      const clsName = m.name === selected ? 'selected' : '';
+      const clsName = m.name === source ? 'source' : '';
       return (
         <li key={m.name} className={clsName} onClick={() => onSelect(m.name)}>
           {m.display_name || m.name}

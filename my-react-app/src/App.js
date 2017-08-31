@@ -23,9 +23,9 @@ function testMaterial(name) {
     blue: b,
     texture: '',
     alpha: 1.0,
-    materialType: 'mType',
-    colorize_deltas: 'delta',
-    colorize_type: 'colorize_type'
+    materialType: 'solid',
+    colorize_deltas: '0.000 - 0.000 - 0.000',
+    colorize_type: 'shift'
   };
 }
 
@@ -49,15 +49,18 @@ function browser_su_action(action) {
     case 'LOAD_MATERIALS':
       return {
         status: 'loaded materials list',
-        materials: testMaterials
+        materials: testMaterials,
+        error: ''
       };
     case 'LOAD_THUMBNAIL':
       return {
-        status: `loaded thumbnail for material '${action.payload}'`
+        status: `loaded thumbnail for material '${action.payload}'`,
+        error: ''
       };
     case 'LOAD_THUMBNAILS':
       return {
-        error: 'loaded all thumbnails'
+        status: 'loaded all thumbnails',
+        error: ''
       };
     case 'REPLACE_MATERIAL':
       return replace_action(action.payload);
@@ -105,7 +108,7 @@ class App extends Component {
       current: '',
       error: '',
       materials: {},
-      selected: '',
+      source: '',
       status: '',
       thumbnails: {}
     };
@@ -133,19 +136,19 @@ class App extends Component {
   selectCurrent(name) {
     this.setState(
       { current: name, error: '', status: `current material ${name}` },
-      () => console.log(`select current(${name})`)
+      () => console.log(`selected current('${name}')`)
     );
   }
 
   selectMaterial(name) {
     this.setState(
       {
-        selected: name,
+        source: name,
         current: '',
         error: '',
-        status: `selected material ${name}`
+        status: `selected source material '${name}'`
       },
-      () => console.log(`select selected(${name})`)
+      () => console.log(`selected source material '${name}'`)
     );
   }
 
@@ -163,13 +166,13 @@ class App extends Component {
 
   //
   replaceMaterial(name) {
-    if (this.state.selected) {
+    if (this.state.source) {
       console.log(`replaceMaterial(${name})`);
       sketchupAction({
         action: 'REPLACE_MATERIAL',
         payload: {
           replace: name,
-          replace_with: this.state.selected,
+          replace_with: this.state.source,
           // adding materials to simulate update via browser_su_action
           materials: this.state.materials
         }
@@ -179,7 +182,7 @@ class App extends Component {
 
   render() {
     const currentMaterial = this.state.materials[this.state.current] || {};
-    const selectedMaterial = this.state.materials[this.state.selected] || {};
+    const selectedMaterial = this.state.materials[this.state.source] || {};
     const statusmsg = formatStatus(this.state.error, this.state.status);
 
     const list = Object.keys(this.state.materials).length ? (
@@ -187,8 +190,8 @@ class App extends Component {
         title={'Source List'}
         materials={this.state.materials}
         onSelect={this.selectMaterial}
-        selected={this.state.selected}
-        thumbnail={this.state.thumbnails[this.state.selected]}
+        source={this.state.source}
+        thumbnail={this.state.thumbnails[this.state.source]}
       />
     ) : (
       <span onClick={() => sketchupAction({ action: 'LOAD_MATERIALS' })}>
@@ -211,10 +214,10 @@ class App extends Component {
             materials={this.state.materials}
             onCurrent={this.selectCurrent}
             onReplace={this.replaceMaterial}
-            selected={this.state.selected}
+            source={this.state.source}
             thumbnails={this.state.thumbnails}
           />
-          <ColorDetails selected={selectedMaterial} current={currentMaterial} />
+          <ColorDetails source={selectedMaterial} current={currentMaterial} />
         </div>
         <div className="App-footer">{statusmsg}</div>
       </div>

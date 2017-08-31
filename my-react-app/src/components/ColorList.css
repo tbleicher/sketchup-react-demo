@@ -44,7 +44,7 @@ li {
   cursor: pointer;
 }
 
-li.selected {
+li.source {
   font-weight: bold;
   background-color: rgb(70, 173, 246);
 }
