@@ -7,6 +7,7 @@ module SketchupReactDemo
   module_function
   def reload
     load('material.rb')
+    load('process_data.rb')
     load('dialog.rb')
   end
 

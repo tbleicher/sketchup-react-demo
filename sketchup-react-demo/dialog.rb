@@ -1,56 +1,9 @@
 # sketchup-react-demo/dialog.rb
 require 'json'
+require_relative 'process_data.rb'
 
 module SketchupReactDemo
   module_function
-  
-  def process_data(data, dialog)
-    puts 'processing data ...'
-    begin
-      response = {'error' => 'unknown action', 'status' => 'error'}
-
-      if data['action'] == 'LOAD_MATERIALS'
-        response = { 
-          'materials' => self.get_material_hash,
-          'status' => 'materials loaded'
-        }
-      end
-
-      if data['action'] == 'LOAD_THUMBNAIL' then
-        name = data['payload']
-        thumbnail = self.get_thumbnail_base64(name)
-        response = {
-          'thumbnails' => { name => thumbnail },
-          'status' => "thumbnail '#{name}' loaded"
-        }
-      end
-
-      if data['action'] == 'LOAD_THUMBNAILS' then
-        response = {
-          'materials' => self.get_material_hash,
-          'thumbnails' => self.get_thumbnails_hash,
-          'status' => 'thumbnails loaded'
-        }
-      end
-          
-      if data['action'] == 'REPLACE_MATERIAL'
-          replace = data['payload']['replace']
-          replace_with = data['payload']['replace_with']
-          self.replace_material(replace, replace_with)
-          response = {
-            'materials' => self.get_material_hash,
-            'status' => "replaced '#{replace}' with '#{replace_with}'"
-          }
-      end
-
-    rescue => e
-      puts e
-      response = {'error' => e, 'status' => 'error'}
-    end
-    
-    js_command = 'update_data(' + response.to_json + ')'
-    dialog.execute_script(js_command)
-  end
     
   def show_dialog
     
@@ -78,8 +31,11 @@ module SketchupReactDemo
       puts "\nJavaScript triggered 'su_action' with parameter #{param}"
       param.each do |key, value|
         puts "#{key} : #{value}"
-      end 
-      SketchupReactDemo::process_data(param, dlg)
+      end
+
+      response = SketchupReactDemo::process_data(param)
+      js_command = 'update_data(' + response.to_json + ')'
+      dlg.execute_script(js_command)
     }
 
     dlg.set_html html

@@ -4,70 +4,13 @@ import ColorDetails from './components/ColorDetails';
 import ColorList from './components/ColorList';
 import ColorDiffList from './components/ColorDiffList';
 
+import { browser_action } from './browser_action';
+
 import logo from './logo.svg';
 import './App.css';
 
 //declare 'sketchup' object as global to stop ESLint errors
 /*global sketchup*/
-
-function testMaterial(name) {
-  const r = parseInt(Math.random() * 256, 10);
-  const g = parseInt(Math.random() * 256, 10);
-  const b = parseInt(Math.random() * 256, 10);
-  return {
-    name,
-    display_name: name,
-    color: `Color(${r}, ${g}, ${b}, 255)`,
-    red: r,
-    green: g,
-    blue: b,
-    texture: '',
-    alpha: 1.0,
-    materialType: 'solid',
-    colorize_deltas: '0.000 - 0.000 - 0.000',
-    colorize_type: 'shift'
-  };
-}
-
-const testMaterials = {};
-'Material1 two M3 four five six seven eight nine ten a11 b12 c13 d14 e15 f16 g17'
-  .split(' ')
-  .forEach(s => {
-    testMaterials[s] = testMaterial(s);
-  });
-
-function replace_action(payload) {
-  const replace = payload.replace;
-  const materials = Object.assign({}, payload.materials);
-  delete materials[replace];
-  const status = `replaced material ${payload.replace} with ${payload.replace_with}`;
-  return { status, materials };
-}
-
-function browser_su_action(action) {
-  switch (action.action) {
-    case 'LOAD_MATERIALS':
-      return {
-        status: 'loaded materials list',
-        materials: testMaterials,
-        error: ''
-      };
-    case 'LOAD_THUMBNAIL':
-      return {
-        status: `loaded thumbnail for material '${action.payload}'`,
-        error: ''
-      };
-    case 'LOAD_THUMBNAILS':
-      return {
-        status: 'loaded all thumbnails',
-        error: ''
-      };
-    case 'REPLACE_MATERIAL':
-      return replace_action(action.payload);
-    default:
-      return {};
-  }
-}
 
 // eslint-disable-next-line
 function sketchupAction(action) {
@@ -79,7 +22,7 @@ function sketchupAction(action) {
     if (e.message !== 'sketchup is not defined') {
       console.error(e);
     } else {
-      const data = browser_su_action(action);
+      const data = browser_action(action);
       // eslint-disable-next-line
       global.update_data({ ...data });
     }
@@ -116,15 +59,14 @@ class App extends Component {
     this.replaceMaterial = this.replaceMaterial.bind(this);
     this.selectCurrent = this.selectCurrent.bind(this);
     this.selectMaterial = this.selectMaterial.bind(this);
-    this.updateMaterial = this.updateMaterial.bind(this);
-    this.updateState = this.updateState.bind(this);
   }
 
   // load materials immediately after app component is created
+  // and set timeout to load thumbnails
   componentDidMount() {
     console.log('componentDidMount');
     sketchupAction({ action: 'LOAD_MATERIALS' });
-    setTimeout(() => sketchupAction({ action: 'LOAD_THUMBNAILS' }), 2000);
+    setTimeout(() => sketchupAction({ action: 'LOAD_THUMBNAILS' }), 500);
   }
 
   // update state with new state received via nextProps
@@ -133,13 +75,15 @@ class App extends Component {
     this.setState(merged);
   }
 
+  // set name of selected color in 'matching' list
   selectCurrent(name) {
     this.setState(
       { current: name, error: '', status: `current material ${name}` },
-      () => console.log(`selected current('${name}')`)
+      () => console.log(`selected current material '${name}'`)
     );
   }
 
+  // set name of source material
   selectMaterial(name) {
     this.setState(
       {
@@ -152,28 +96,20 @@ class App extends Component {
     );
   }
 
-  updateMaterial(evt, mat) {
-    evt.preventDefault();
-  }
-
-  updateState(id) {
-    const value = document.getElementById(id).value;
-    const newState = {};
-    newState[id] = value;
-
-    this.setState(newState);
-  }
-
-  //
+  // trigger action to replace current material with source material
   replaceMaterial(name) {
     if (this.state.source) {
       console.log(`replaceMaterial(${name})`);
+      this.setState({
+        error: '',
+        status: `replacing material '${name}' with '${this.state.source}'`
+      });
       sketchupAction({
         action: 'REPLACE_MATERIAL',
         payload: {
           replace: name,
           replace_with: this.state.source,
-          // adding materials to simulate update via browser_su_action
+          // adding materials to simulate update via browser_action
           materials: this.state.materials
         }
       });
