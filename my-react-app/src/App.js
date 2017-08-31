@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import ColorDetailsForm from './components/ColorDetailsForm';
+import ColorDetails from './components/ColorDetails';
 import ColorList from './components/ColorList';
 import ColorDiffList from './components/ColorDiffList';
 
@@ -22,7 +22,10 @@ function testMaterial(name) {
     green: g,
     blue: b,
     texture: '',
-    alpha: 1.0
+    alpha: 1.0,
+    materialType: 'mType',
+    colorize_deltas: 'delta',
+    colorize_type: 'colorize_type'
   };
 }
 
@@ -91,11 +94,7 @@ function mergeProps(state, newState = {}) {
 }
 
 function formatStatus(error = '', status = '') {
-  return error
-    ? <span className="error">
-        {error}
-      </span>
-    : status;
+  return error ? <span className="error">{error}</span> : status;
 }
 
 class App extends Component {
@@ -103,6 +102,7 @@ class App extends Component {
     super(props);
 
     this.state = {
+      current: '',
       error: '',
       materials: {},
       selected: '',
@@ -111,6 +111,7 @@ class App extends Component {
     };
 
     this.replaceMaterial = this.replaceMaterial.bind(this);
+    this.selectCurrent = this.selectCurrent.bind(this);
     this.selectMaterial = this.selectMaterial.bind(this);
     this.updateMaterial = this.updateMaterial.bind(this);
     this.updateState = this.updateState.bind(this);
@@ -129,6 +130,37 @@ class App extends Component {
     this.setState(merged);
   }
 
+  selectCurrent(name) {
+    this.setState(
+      { current: name, error: '', status: `current material ${name}` },
+      () => console.log(`select current(${name})`)
+    );
+  }
+
+  selectMaterial(name) {
+    this.setState(
+      {
+        selected: name,
+        current: '',
+        error: '',
+        status: `selected material ${name}`
+      },
+      () => console.log(`select selected(${name})`)
+    );
+  }
+
+  updateMaterial(evt, mat) {
+    evt.preventDefault();
+  }
+
+  updateState(id) {
+    const value = document.getElementById(id).value;
+    const newState = {};
+    newState[id] = value;
+
+    this.setState(newState);
+  }
+
   //
   replaceMaterial(name) {
     if (this.state.selected) {
@@ -145,41 +177,24 @@ class App extends Component {
     }
   }
 
-  selectMaterial(name) {
-    console.log(`selectMaterial(${name})`);
-    this.setState({ selected: name, status: `selected material ${name}` });
-    if (!this.state.thumbnails[name]) {
-      sketchupAction({ action: 'LOAD_THUMBNAIL', payload: name });
-    }
-  }
-
-  updateMaterial(evt, mat) {
-    evt.preventDefault();
-  }
-
-  updateState(id) {
-    const value = document.getElementById(id).value;
-    const newState = {};
-    newState[id] = value;
-
-    this.setState(newState);
-  }
-
   render() {
-    const currentMaterial = this.state.materials[this.state.selected] || {};
+    const currentMaterial = this.state.materials[this.state.current] || {};
+    const selectedMaterial = this.state.materials[this.state.selected] || {};
     const statusmsg = formatStatus(this.state.error, this.state.status);
 
-    const list = Object.keys(this.state.materials).length
-      ? <ColorList
-          title={'Source List'}
-          materials={this.state.materials}
-          onSelect={this.selectMaterial}
-          selected={this.state.selected}
-          thumbnail={this.state.thumbnails[this.state.selected]}
-        />
-      : <span onClick={() => sketchupAction({ action: 'LOAD_MATERIALS' })}>
-          load materials
-        </span>;
+    const list = Object.keys(this.state.materials).length ? (
+      <ColorList
+        title={'Source List'}
+        materials={this.state.materials}
+        onSelect={this.selectMaterial}
+        selected={this.state.selected}
+        thumbnail={this.state.thumbnails[this.state.selected]}
+      />
+    ) : (
+      <span onClick={() => sketchupAction({ action: 'LOAD_MATERIALS' })}>
+        load materials
+      </span>
+    );
 
     return (
       <div className="App">
@@ -192,19 +207,16 @@ class App extends Component {
           {list}
           <ColorDiffList
             title={'Matching Colors'}
+            current={this.state.current}
             materials={this.state.materials}
+            onCurrent={this.selectCurrent}
             onReplace={this.replaceMaterial}
             selected={this.state.selected}
             thumbnails={this.state.thumbnails}
           />
-          <ColorDetailsForm
-            material={currentMaterial}
-            onApply={this.updateState}
-          />
+          <ColorDetails selected={selectedMaterial} current={currentMaterial} />
         </div>
-        <div className="App-footer">
-          {statusmsg}
-        </div>
+        <div className="App-footer">{statusmsg}</div>
       </div>
     );
   }

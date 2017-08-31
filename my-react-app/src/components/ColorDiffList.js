@@ -21,8 +21,10 @@ function color_diff(ref, m) {
 
 function ColorDiffList({
   title = 'Matching Colors',
+  current = '',
   materials = {},
   onReplace = () => {},
+  onCurrent = () => {},
   selected = '',
   thumbnails = {}
 }) {
@@ -37,8 +39,9 @@ function ColorDiffList({
     )
     .sort((a, b) => a.diff - b.diff)
     .map(m => {
+      const cls = m.name === current ? 'current' : '';
       return (
-        <li key={m.name}>
+        <li key={m.name} onClick={() => onCurrent(m.name)} className={cls}>
           {m.thumbnail ? (
             imgSrcFromBase64(m.thumbnail)
           ) : (
@@ -51,7 +54,7 @@ function ColorDiffList({
             <br />
             {m.texture}
             <br />
-            {selected ? (
+            {(selected && cls) ? (
               <span onClick={() => onReplace(m.name)}>replace</span>
             ) : (
               ''

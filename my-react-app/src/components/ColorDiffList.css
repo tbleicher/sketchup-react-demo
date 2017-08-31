@@ -38,22 +38,25 @@ ul {
   margin: 2px;
   margin-left: 0px;
   padding: 5px;
-  background-color: #fff;
   border: 2px solid #bbb;
   border-radius: 5px;
   cursor: pointer;
   height: 66px;
 }
 
-li.selected {
+li.current {
+  background-color: #e8f5fe;
   font-weight: bold;
-  background-color: rgb(70, 173, 246);
 }
 
 .cdiff {
   font-size: 12px;
   font-style: italic;
   font-weight: normal;
+}
+
+.cdiff span {
+  font-weight: bold;
 }
 
 #color_diff_list img {
