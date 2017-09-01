@@ -44,7 +44,6 @@ module SketchupReactDemo
 
       if action['type'] == 'LOAD_THUMBNAILS' then
         response = {
-          'materials' => self.get_material_hash,
           'thumbnails' => self.get_thumbnails_hash,
           'status' => 'thumbnails loaded'
         }
@@ -54,6 +53,7 @@ module SketchupReactDemo
           replace = action['payload']['replace']
           replace_with = action['payload']['replace_with']
           self.replace_material(replace, replace_with)
+          
           response = {
             'materials' => self.get_material_hash,
             'status' => "replaced '#{replace}' with '#{replace_with}'"
