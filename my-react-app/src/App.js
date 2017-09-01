@@ -65,8 +65,8 @@ class App extends Component {
   // and set timeout to load thumbnails
   componentDidMount() {
     console.log('componentDidMount');
-    sketchupAction({ action: 'LOAD_MATERIALS' });
-    setTimeout(() => sketchupAction({ action: 'LOAD_THUMBNAILS' }), 500);
+    sketchupAction({ type: 'LOAD_MATERIALS' });
+    setTimeout(() => sketchupAction({ type: 'LOAD_THUMBNAILS' }), 500);
   }
 
   // update state with new state received via nextProps
@@ -105,7 +105,7 @@ class App extends Component {
         status: `replacing material '${name}' with '${this.state.source}'`
       });
       sketchupAction({
-        action: 'REPLACE_MATERIAL',
+        type: 'REPLACE_MATERIAL',
         payload: {
           replace: name,
           replace_with: this.state.source,
@@ -130,7 +130,7 @@ class App extends Component {
         thumbnail={this.state.thumbnails[this.state.source]}
       />
     ) : (
-      <span onClick={() => sketchupAction({ action: 'LOAD_MATERIALS' })}>
+      <span onClick={() => sketchupAction({ type: 'LOAD_MATERIALS' })}>
         load materials
       </span>
     );

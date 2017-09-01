@@ -3,26 +3,38 @@
 module SketchupReactDemo
   module_function
   
-  def process_data(data)
-    puts 'processing data ...'
+  def log_response(response)
+    puts 'Response data:'
+    response.each { |key, value| 
+      if key == 'materials' || key == 'thumbnails'
+        puts "  #{key} : [object]"
+      else
+        puts "  #{key} : #{value}"
+      end
+    }
+  end
 
-    # The response is a hash object with the same keys as the props of the
-    # App component in React: error, status, materials and thumbnails
-    
+  # collect response data for action
+  #
+  # The response is a hash object with the same keys as the props of the
+  # App component in React: error, status, materials and thumbnails
+  def process_action(action)
+    puts 'processing action ...'
+  
     # Begin with an error message to flag if something goes wrong.
-    response = {'error' => 'unknown action', 'status' => 'error'}
+    response = {'error' => 'unknown action type', 'status' => 'error'}
     
     begin
       
-      if data['action'] == 'LOAD_MATERIALS'
+      if action['type'] == 'LOAD_MATERIALS'
         response = { 
           'materials' => self.get_material_hash,
           'status' => 'materials loaded'
         }
       end
 
-      if data['action'] == 'LOAD_THUMBNAIL' then
-        name = data['payload']
+      if action['type'] == 'LOAD_THUMBNAIL' then
+        name = action['payload']
         thumbnail = self.get_thumbnail_base64(name)
         response = {
           'thumbnails' => { name => thumbnail },
@@ -30,7 +42,7 @@ module SketchupReactDemo
         }
       end
 
-      if data['action'] == 'LOAD_THUMBNAILS' then
+      if action['type'] == 'LOAD_THUMBNAILS' then
         response = {
           'materials' => self.get_material_hash,
           'thumbnails' => self.get_thumbnails_hash,
@@ -38,9 +50,9 @@ module SketchupReactDemo
         }
       end
       
-      if data['action'] == 'REPLACE_MATERIAL'
-          replace = data['payload']['replace']
-          replace_with = data['payload']['replace_with']
+      if action['type'] == 'REPLACE_MATERIAL'
+          replace = action['payload']['replace']
+          replace_with = action['payload']['replace_with']
           self.replace_material(replace, replace_with)
           response = {
             'materials' => self.get_material_hash,
@@ -55,6 +67,7 @@ module SketchupReactDemo
       response = {'error' => e, 'status' => 'error'}
     end
     
+    self.log_response(response)
     return response
   end
 

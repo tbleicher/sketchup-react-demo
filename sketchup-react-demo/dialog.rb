@@ -4,7 +4,19 @@ require_relative 'process_data.rb'
 
 module SketchupReactDemo
   module_function
-    
+  
+  def log_action(action)
+    puts "\nJavaScript triggered 'su_action'"
+    puts "TYPE : #{action['type']}"
+    if action['payload']
+      action['payload'].each do |key, value|
+        if key != 'materials'
+          puts "  #{key} : #{value}"
+        end
+      end
+    end
+  end
+
   def show_dialog
     
     # load html from index.html and replace BASEURL with the current directory
@@ -27,13 +39,10 @@ module SketchupReactDemo
     dlg = UI::HtmlDialog.new(options)
  
     # define 'su_action' callback to be used from JavaScript
-    dlg.add_action_callback("su_action") { |action_context, param|
-      puts "\nJavaScript triggered 'su_action' with parameter #{param}"
-      param.each do |key, value|
-        puts "#{key} : #{value}"
-      end
+    dlg.add_action_callback("su_action") { |action_context, action|
+      self.log_action(action)
 
-      response = SketchupReactDemo::process_data(param)
+      response = self.process_action(action)
       js_command = 'update_data(' + response.to_json + ')'
       dlg.execute_script(js_command)
     }
