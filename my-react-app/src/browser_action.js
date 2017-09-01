@@ -38,7 +38,7 @@ function replace_action(payload) {
 }
 
 function browser_action(action) {
-  switch (action.action) {
+  switch (action.type) {
     case 'LOAD_MATERIALS':
       return {
         status: 'loaded materials list',
