@@ -1,6 +1,6 @@
 # sketchup-react-demo/dialog.rb
 require 'json'
-require_relative 'process_data.rb'
+require_relative 'process_action.rb'
 
 module SketchupReactDemo
   module_function
