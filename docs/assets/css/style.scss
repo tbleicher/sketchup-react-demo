@@ -1,0 +1,8 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+#main_content p:first-child {
+  background-color: yellow;
+}
