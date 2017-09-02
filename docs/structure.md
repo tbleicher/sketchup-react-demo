@@ -1,5 +1,6 @@
 [previous](./index.md) 
 [next](./create_react_app.md)
+
 ---
 
 ## Structure of the SketchUp Extension
@@ -88,3 +89,8 @@ end
 ```
 
 The last return statement returns the dialog. We can use this to invoke the  `show_dialog` function from the Ruby console and interact with the returned dialog instance.
+
+---
+
+[previous](./index.md) 
+[next](./create_react_app.md)
