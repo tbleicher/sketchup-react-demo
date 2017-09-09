@@ -19,7 +19,8 @@ function sketchupAction(action) {
   try {
     sketchup.su_action(action);
   } catch (e) {
-    if (e.message !== 'sketchup is not defined') {
+    if (!e instanceof ReferenceError) {
+      // 'sketchup is not defined'
       console.error(e);
     } else {
       const data = browser_action(action);
@@ -98,42 +99,35 @@ class App extends Component {
 
   // trigger action to replace current material with source material
   replaceMaterial(name) {
-    if (this.state.source) {
-      console.log(`replaceMaterial(${name})`);
-      this.setState({
+    if (!this.state.source) {
+      return;
+    }
+
+    // update the state to provide user feedback
+    this.setState(
+      {
         error: '',
         status: `replacing material '${name}' with '${this.state.source}'`
-      });
-      sketchupAction({
-        type: 'REPLACE_MATERIAL',
-        payload: {
-          replace: name,
-          replace_with: this.state.source,
-          // adding materials to simulate update via browser_action
-          materials: this.state.materials
-        }
-      });
-    }
+      },
+      () => console.log(`replaceMaterial(${name})`)
+    );
+
+    // call sketchup.su_action with the correct action
+    sketchupAction({
+      type: 'REPLACE_MATERIAL',
+      payload: {
+        replace: name,
+        replace_with: this.state.source,
+        // adding materials to simulate update via browser_action
+        materials: this.state.materials
+      }
+    });
   }
 
   render() {
     const currentMaterial = this.state.materials[this.state.current] || {};
     const selectedMaterial = this.state.materials[this.state.source] || {};
     const statusmsg = formatStatus(this.state.error, this.state.status);
-
-    const list = Object.keys(this.state.materials).length ? (
-      <ColorList
-        title={'Source List'}
-        materials={this.state.materials}
-        onSelect={this.selectMaterial}
-        source={this.state.source}
-        thumbnail={this.state.thumbnails[this.state.source]}
-      />
-    ) : (
-      <span onClick={() => sketchupAction({ type: 'LOAD_MATERIALS' })}>
-        load materials
-      </span>
-    );
 
     return (
       <div className="App">
@@ -143,7 +137,14 @@ class App extends Component {
         </div>
 
         <div className="App-body">
-          {list}
+          <ColorList
+            title={'Source List'}
+            materials={this.state.materials}
+            onSelect={this.selectMaterial}
+            source={this.state.source}
+            thumbnail={this.state.thumbnails[this.state.source]}
+          />
+
           <ColorDiffList
             title={'Matching Colors'}
             current={this.state.current}
@@ -153,8 +154,10 @@ class App extends Component {
             source={this.state.source}
             thumbnails={this.state.thumbnails}
           />
+
           <ColorDetails source={selectedMaterial} current={currentMaterial} />
         </div>
+
         <div className="App-footer">{statusmsg}</div>
       </div>
     );
