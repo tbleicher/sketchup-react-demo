@@ -40,10 +40,6 @@ function mergeProps(state, newProps = {}) {
   };
 }
 
-function formatStatus(error = '', status = '') {
-  return error ? <span className="error">{error}</span> : status;
-}
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -76,21 +72,19 @@ class App extends Component {
     this.setState(merged);
   }
 
-  // set name of selected color in 'matching' list
+  // set name of color selected in 'matching' list
   selectMatch(name) {
-    this.setState(
-      { match: name, error: '', status: `match material ${name}` },
-      () => console.log(`selected match material '${name}'`)
+    this.setState({ match: name, status: `match material ${name}` }, () =>
+      console.log(`selected match material '${name}'`)
     );
   }
 
-  // set name of source material
+  // set name of source material and reset match selection
   selectMaterial(name) {
     this.setState(
       {
         source: name,
         match: '',
-        error: '',
         status: `selected source material '${name}'`
       },
       () => console.log(`selected source material '${name}'`)
@@ -106,7 +100,6 @@ class App extends Component {
     // update the state to provide user feedback
     this.setState(
       {
-        error: '',
         status: `replacing material '${name}' with '${this.state.source}'`
       },
       () => console.log(`replaceMaterial(${name})`)
@@ -119,13 +112,18 @@ class App extends Component {
         replace: name,
         replace_with: this.state.source,
         // adding materials to simulate update via browser_action
-        materials: this.state.materials
+        //materials: this.state.materials
       }
     });
   }
 
   render() {
-    const statusmsg = formatStatus(this.state.error, this.state.status);
+    const statusmsg =
+      this.state.status === 'ERROR' ? (
+        <span className="error">{this.state.error}</span>
+      ) : (
+        this.state.status
+      );
 
     return (
       <div className="App">
@@ -154,7 +152,7 @@ class App extends Component {
           />
 
           <ColorDetails
-            source={this.state.materials[this.state.source] || {}} 
+            source={this.state.materials[this.state.source] || {}}
             match={this.state.materials[this.state.match] || {}}
           />
         </div>

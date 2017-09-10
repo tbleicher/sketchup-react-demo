@@ -22,7 +22,7 @@ module SketchupReactDemo
     puts 'processing action ...'
   
     # Begin with an error message to flag if something goes wrong.
-    response = {'error' => 'unknown action type', 'status' => 'error'}
+    response = {'error' => 'unknown action type', 'status' => 'ERROR'}
     
     begin
       
@@ -64,7 +64,7 @@ module SketchupReactDemo
     # the exception's error message 
     rescue => e
       puts e
-      response = {'error' => e, 'status' => 'error'}
+      response = {'error' => e, 'status' => 'ERROR'}
     end
     
     self.log_response(response)
