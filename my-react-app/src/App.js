@@ -12,19 +12,17 @@ import './App.css';
 //declare 'sketchup' object as global to stop ESLint errors
 /*global sketchup*/
 
-// eslint-disable-next-line
 function sketchupAction(action) {
-  // evt.preventDefault();
   console.log('state:', JSON.stringify(action, null, 2));
   try {
     sketchup.su_action(action);
   } catch (e) {
+    // ignore 'sketchup is not defined' in development
+    // but report other errors
     if (!e instanceof ReferenceError) {
-      // 'sketchup is not defined'
       console.error(e);
     } else {
       const data = browser_action(action);
-      // eslint-disable-next-line
       global.update_data({ ...data });
     }
   }
