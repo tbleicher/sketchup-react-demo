@@ -4,7 +4,7 @@ import ColorDetails from './components/ColorDetails';
 import ColorList from './components/ColorList';
 import ColorDiffList from './components/ColorDiffList';
 
-import { browser_action } from './browser_action';
+import browser_action from './browser_action';
 
 import logo from './logo.svg';
 import './App.css';
