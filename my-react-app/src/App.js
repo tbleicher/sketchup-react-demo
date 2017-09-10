@@ -31,12 +31,12 @@ function sketchupAction(action) {
 }
 
 // replace error, materials and status but update thumbnails
-function mergeProps(state, newState = {}) {
+function mergeProps(state, newProps = {}) {
   return {
-    error: newState.error || '',
-    materials: newState.materials || state.materials || {},
-    status: newState.status || state.status || '',
-    thumbnails: Object.assign({}, state.thumbnails, newState.thumbnails)
+    error: newProps.error || '',
+    materials: newProps.materials || state.materials || {},
+    status: newProps.status || state.status || '',
+    thumbnails: Object.assign({}, state.thumbnails, newProps.thumbnails)
   };
 }
 
@@ -49,7 +49,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      current: '',
+      match: '',
       error: '',
       materials: {},
       source: '',
@@ -58,7 +58,7 @@ class App extends Component {
     };
 
     this.replaceMaterial = this.replaceMaterial.bind(this);
-    this.selectCurrent = this.selectCurrent.bind(this);
+    this.selectMatch = this.selectMatch.bind(this);
     this.selectMaterial = this.selectMaterial.bind(this);
   }
 
@@ -77,10 +77,10 @@ class App extends Component {
   }
 
   // set name of selected color in 'matching' list
-  selectCurrent(name) {
+  selectMatch(name) {
     this.setState(
-      { current: name, error: '', status: `current material ${name}` },
-      () => console.log(`selected current material '${name}'`)
+      { match: name, error: '', status: `match material ${name}` },
+      () => console.log(`selected match material '${name}'`)
     );
   }
 
@@ -89,7 +89,7 @@ class App extends Component {
     this.setState(
       {
         source: name,
-        current: '',
+        match: '',
         error: '',
         status: `selected source material '${name}'`
       },
@@ -97,7 +97,7 @@ class App extends Component {
     );
   }
 
-  // trigger action to replace current material with source material
+  // trigger action to replace match material with source material
   replaceMaterial(name) {
     if (!this.state.source) {
       return;
@@ -125,8 +125,6 @@ class App extends Component {
   }
 
   render() {
-    const currentMaterial = this.state.materials[this.state.current] || {};
-    const selectedMaterial = this.state.materials[this.state.source] || {};
     const statusmsg = formatStatus(this.state.error, this.state.status);
 
     return (
@@ -140,22 +138,25 @@ class App extends Component {
           <ColorList
             title={'Source List'}
             materials={this.state.materials}
-            onSelect={this.selectMaterial}
+            onClick={this.selectMaterial}
             source={this.state.source}
             thumbnail={this.state.thumbnails[this.state.source]}
           />
 
           <ColorDiffList
             title={'Matching Colors'}
-            current={this.state.current}
+            match={this.state.match}
             materials={this.state.materials}
-            onCurrent={this.selectCurrent}
+            onClick={this.selectMatch}
             onReplace={this.replaceMaterial}
             source={this.state.source}
             thumbnails={this.state.thumbnails}
           />
 
-          <ColorDetails source={selectedMaterial} current={currentMaterial} />
+          <ColorDetails
+            source={this.state.materials[this.state.source] || {}} 
+            match={this.state.materials[this.state.match] || {}}
+          />
         </div>
 
         <div className="App-footer">{statusmsg}</div>

@@ -18,7 +18,7 @@
   margin-bottom: 5px;
 }
 
-.detail .source, .detail .current {
+.detail .source, .detail .match {
   padding: 2px;
   background-color: white;
   font-size: 14px;

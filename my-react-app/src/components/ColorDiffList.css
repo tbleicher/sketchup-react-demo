@@ -44,7 +44,7 @@ ul {
   height: 66px;
 }
 
-li.current {
+li.match {
   background-color: #d8eefd;
   font-weight: bold;
 }

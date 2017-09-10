@@ -12,7 +12,7 @@ function imgSrcFromBase64(data) {
 function ColorList({
   title = 'Materials',
   materials = {},
-  onSelect = () => {},
+  onClick = () => {},
   source = '',
   thumbnail = ''
 }) {
@@ -22,11 +22,12 @@ function ColorList({
     .map(m => {
       const clsName = m.name === source ? 'source' : '';
       return (
-        <li key={m.name} className={clsName} onClick={() => onSelect(m.name)}>
+        <li key={m.name} className={clsName} onClick={() => onClick(m.name)}>
           {m.display_name || m.name}
         </li>
       );
     });
+    
   const tn = thumbnail
     ? imgSrcFromBase64(thumbnail)
     : <img src={logo} width={128} height={128} alt="thumbnail" />;
