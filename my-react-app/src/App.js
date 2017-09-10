@@ -13,7 +13,7 @@ import './App.css';
 /*global sketchup*/
 
 function sketchupAction(action) {
-  console.log('state:', JSON.stringify(action, null, 2));
+  console.log('action:', JSON.stringify(action, null, 2));
   try {
     sketchup.su_action(action);
   } catch (e) {
@@ -59,7 +59,8 @@ class App extends Component {
   // load materials immediately after app component is created
   // and set timeout to load thumbnails
   componentDidMount() {
-    console.log('componentDidMount');
+    console.log('componentDidMount - loading materials ...');
+    this.setState({state: 'loading materials ...'});
     sketchupAction({ type: 'LOAD_MATERIALS' });
     setTimeout(() => sketchupAction({ type: 'LOAD_THUMBNAILS' }), 500);
   }
@@ -72,8 +73,12 @@ class App extends Component {
 
   // set name of color selected in 'matching' list
   selectMatch(name) {
-    this.setState({ match: name, status: `match material ${name}` }, () =>
-      console.log(`selected match material '${name}'`)
+    this.setState(
+      {
+        match: name, 
+        status: `match material ${name}`
+      },
+      () => console.log(`selected match material '${name}'`)
     );
   }
 
