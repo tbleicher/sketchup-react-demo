@@ -1,3 +1,8 @@
+[<< Extension Structure](./structure.md) 
+[Build the App UI >>](./build_app_ui.md)
+
+---
+
 ## Creating a new React.js project
 
 ### Requirements
@@ -45,9 +50,9 @@ Happy hacking!
 
 Follow the last two commands to change into the newly create directory and start the development server on port 3000. A new browser window with the **Welcome to React** page will open up.
 
-![Basic React.js App](https://tbleicher.github.io/sketchup-react-demo/images/basic_react_app.png)
+![Basic React.js App](./images/basic_react_app.png)
 
-It may not look like much but this page has all elements of a working React *Single Page App*. Our goal is to bundle up this page into a portable format that we can copy into a Ruby extension and load into a new UI::HtmlDialog window.
+It may not look like much but this page has all elements of a working React *Single Page Application*. Our goal is to bundle up this page into a portable format that we can copy to the Ruby extension folder and load into a new UI::HtmlDialog window.
 
 ### Modifying the basic app
 
@@ -57,7 +62,7 @@ Before we can create an app package that works from within SketchUp we need to m
 
 Open the file `package.json` in the root directory of the app in an editor and add a `homepage` key to JSON object like below: 
 
-```json
+```javascript
 ...
 "devDependencies": {
   "react-scripts": "1.0.10"
@@ -85,7 +90,7 @@ As mentioned above, we need to add a placeholder to the `index.html` template to
 
 #### src/index.js
 
-Finally, open the file `src/index.js` and comment out the two lines related to `ServiceWorker`. There is no use for it in our context.
+Finally, open the file `src/index.js` and comment out the two lines related to `ServiceWorker`. The service worker is responsible for the progressive loading of content over a potentially slow internet connection. In our contenxt where the data is loaded from the harddrive there is no use for it.
 
 ```javascript
 import React from 'react';
@@ -138,3 +143,8 @@ npm run deploy:local
 ## Next steps
 
 We have a working setup with React running inside the HtmlDialog window. React doesn't do much yet and we have not set up any form of interaction with SketchUp. We will address these in the next parts of this tutorial.
+
+---
+
+[<< Extension Structure](./structure.md) 
+[Build the App UI >>](./build_app_ui.md)

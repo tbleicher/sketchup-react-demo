@@ -12,9 +12,14 @@ TODO
 
 [Connecting Ruby and JavaScript](./connect_ruby_with_js.md)
 
+[React App](./the_react_app.md)
+
+
+
 ### The App
 
 TODO: App Description
 
 TODO: Github repo
 
+### Editing

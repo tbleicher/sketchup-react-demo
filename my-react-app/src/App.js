@@ -113,9 +113,7 @@ class App extends Component {
       type: 'REPLACE_MATERIAL',
       payload: {
         replace: name,
-        replace_with: this.state.source,
-        // adding materials to simulate update via browser_action
-        //materials: this.state.materials
+        replace_with: this.state.source
       }
     });
   }
