@@ -1,7 +1,27 @@
+[<< Connecting Ruby and JavaScript](./connect_ruby_with_js.md)
+[Back to Index](./index.md)
+
+---
 
 ## Connecting the App
 
-We have established the basics of exchanging data between Ruby and JavaScript. To apply this in our app we have to extend the Ruby callback to process the action sent from the dialog and send the result back as a JSON string.
+We have established the basics of exchanging data between Ruby and JavaScript. To apply this in our app we have to extend the Ruby callback to process the action sent from the dialog and send the result back as a JSON string. The typical update cycle will look something like this:
+
+![The Outline of the React app.](./images/update_data_flow.png)
+
+1. A user interaction triggers a function.
+2. The function calls `setState` to update the interface with a new state. It also passes an action to the Ruby `su_action` callback that is then sent to `process_action`.
+3. `process_action` evaluates the type of the action, runs the corresponding Ruby function and creates a response object.
+4. `dialog.execute_script` is used to run the JavaScript `update_data` function with the response object as argument.  
+5. `update_data` calls `React.render` which passes the new data to the App component as props.data.
+6. `App.willReceiveProps` merges the new data set with the component state and rebuilds the interface.
+7. A user interaction triggers a function ...
+
+Strictly speaking, only the `REPLACE_MATERIAL` action will be processed in this way. The selection of a material bypasses the Ruby side and just triggers a UI update via `setState`.
+
+### The Ruby Callback
+
+At first we need to extend the Ruby action callback to process the action and return the response object to the dialog.
 
 ```ruby
   ...
@@ -124,4 +144,9 @@ function mergeProps(state, newProps = {}) {
 ...
 ```
 
-With this function we have all the elemnts that are necessary to receive data in JavaScript and update the interface accordingly. 
+With this function we have all the elemnts that are necessary to receive data in JavaScript and update the interface accordingly.
+
+---
+
+[<< Connecting Ruby and JavaScript](./connect_ruby_with_js.md)
+[Back to Index](./index.md)

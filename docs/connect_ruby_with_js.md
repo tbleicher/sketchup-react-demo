@@ -1,5 +1,5 @@
-[previous](./create_react_app.md) 
-[next]
+[<< Building the UI](./build_app_ui.md) 
+[Connecting the UI >>](./connect_app.md)
 
 ---
 
@@ -87,7 +87,7 @@ You can expand the object logged in the web console to see that all the keys in 
 
 We have established a way to send data from the HtmlDialog to Ruby via a callback and use the `execute_script` function to invoke a JavaScript function with arguments from Ruby. However, this will only work when the dialog is created by the SketchUp extension. If we want to use the benefits of the *webpack dev server* we have to handle the error that results from the missing global `sketchup` object.
 
-The `sketchupAction` function will try to execute `sketchup.su_action` and check if the resulting error was caused by a missing reference to the `sketchup` object. In that case we use a stand-in function (`browser_action`) to generate the response data and call the `update_data` function with the result like Ruby would do.
+The `sketchupAction` function (in `App.js`) will try to execute `sketchup.su_action` and check if the resulting error was caused by a missing reference to the `sketchup` object. In that case we use a stand-in function (`browser_action`) to generate the response data and call the `update_data` function with the result like Ruby would do.
 
 We have to add a comment for ESLint to consider `sketchup` a globally declared object, otherwise the compile step will fail with errors about an undeclared variable.  
 
@@ -117,5 +117,5 @@ function sketchupAction(action) {
 ```
 ---
 
-[previous](./create_react_app.md) 
-[next]
+[<< Building the UI](./build_app_ui.md) 
+[Connecting the UI >>](./connect_app.md)

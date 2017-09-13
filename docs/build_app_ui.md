@@ -5,17 +5,11 @@
 
 ## Building the React UI
 
-For the purpose of this tutorial we will create a simple app that helps to reduce the number of materials used in a model. It shows the list of model materials (**Source List**) to the left and a list of **Matching Colors** in the center. The matches are sorted by the [CIEDE2000] (https://en.wikipedia.org/wiki/Color_difference#CIEDE2000) color difference to the selected source material.
-
-When both a source and a match are selected, their **Color Details** are displayed in the right panel. The match also displays a `replace` link that will use a Ruby function to replace all uses of the match with the source material.    
+### The App Component
 
 ![The Outline of the React app.](./images/app_outline.png) 
 
-
-### The App Component
-
-In React a UI is built out of `components`. The top level component (`app.js`) creates the header and footer (green) and displays the list compontents in its main area (orange).  
-
+In React a UI is built out of `components`. The top level component `App` creates the header and footer (green) and displays the list compontents in its main area (orange).  
 
 #### The Component State
 
@@ -227,7 +221,7 @@ The list components take the list of materials, any existing selections and the 
 
 ### Next steps
 
-TODO: Connect Ruby with JavaScript.
+Our app is now running in the webpack dev server. In the next steps we will connect the JavaScript UI with the Ruby backend.
 
 ---
 

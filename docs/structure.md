@@ -1,5 +1,5 @@
-[previous](./index.md) 
-[next](./create_react_app.md)
+[<< Index](./index.md) 
+[Creating a basic *React.js* project >>](./create_react_app.md)
 
 ---
 
@@ -92,5 +92,5 @@ The last return statement returns the dialog. We can use this to invoke the  `sh
 
 ---
 
-[previous](./index.md) 
-[next](./create_react_app.md)
+[<< Index](./index.md) 
+[Creating a basic *React.js* project >>](./create_react_app.md)
