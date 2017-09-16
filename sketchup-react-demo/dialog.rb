@@ -43,7 +43,8 @@ module SketchupReactDemo
       self.log_action(action)
 
       response = self.process_action(action)
-      js_command = 'update_data(' + response.to_json + ')'
+      #js_command = 'update_data(' + response.to_json + ')'
+      js_command = 'sketchupAction(' + response.to_json + ')'
       dlg.execute_script(js_command)
     }
 

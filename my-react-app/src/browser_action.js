@@ -65,6 +65,14 @@ const names = 'M1 two M3 four five six seven a11 b12 c13 d14 e15 f16 g17';
 const materials = materialsMock(names);
 
 function browser_action(action) {
+  return {
+    id: action.id,
+    type: action.type,
+    payload: browser_payload(action)
+  };
+}
+
+function browser_payload(action) {
   switch (action.type) {
     case 'LOAD_MATERIALS':
       return {

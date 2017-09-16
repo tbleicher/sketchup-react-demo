@@ -5,7 +5,10 @@ module SketchupReactDemo
   
   def log_response(response)
     puts 'Response data:'
-    response.each { |key, value| 
+    puts "id: #{response['id']}"
+    puts "type: #{response['type']}"
+    puts "payload:"
+    response['payload'].each { |key, value| 
       if key == 'materials' || key == 'thumbnails'
         puts "  #{key} : [object]"
       else
@@ -22,12 +25,19 @@ module SketchupReactDemo
     puts 'processing action ...'
   
     # Begin with an error message to flag if something goes wrong.
-    response = {'error' => 'unknown action type', 'status' => 'ERROR'}
+    response = {
+      'id' => action['id'],
+      'type' => action['type'],
+      'payload' => {
+        'error' => "unknown action type '#{action['type']}'", 
+        'status' => 'ERROR'
+      }
+    }
     
     begin
       
       if action['type'] == 'LOAD_MATERIALS'
-        response = { 
+        response['payload'] = {
           'materials' => self.get_material_hash,
           'status' => 'materials loaded'
         }
@@ -36,14 +46,14 @@ module SketchupReactDemo
       if action['type'] == 'LOAD_THUMBNAIL' then
         name = action['payload']
         thumbnail = self.get_thumbnail_base64(name)
-        response = {
+        response['payload'] = {
           'thumbnails' => { name => thumbnail },
           'status' => "thumbnail '#{name}' loaded"
         }
       end
 
       if action['type'] == 'LOAD_THUMBNAILS' then
-        response = {
+        response['payload'] = {
           'thumbnails' => self.get_thumbnails_hash,
           'status' => 'thumbnails loaded'
         }
@@ -54,7 +64,7 @@ module SketchupReactDemo
           replace_with = action['payload']['replace_with']
           self.replace_material(replace, replace_with)
           
-          response = {
+          response['payload'] = {
             'materials' => self.get_material_hash,
             'status' => "replaced '#{replace}' with '#{replace_with}'"
           }
@@ -64,7 +74,14 @@ module SketchupReactDemo
     # the exception's error message 
     rescue => e
       puts e
-      response = {'error' => e, 'status' => 'ERROR'}
+      response = {
+        'id' => action['id'],
+        'type' => action['type'], 
+        'payload' => {
+          'error' => e, 
+          'status' => 'ERROR'
+        }
+      }
     end
     
     self.log_response(response)
